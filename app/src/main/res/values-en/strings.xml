@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Monitor your Usage</string>
+    <string name="list_title">Meters List</string>
+    <string name="form_title">New Reading</string>
+    <string name="button_save">Save</string>
+</resources>

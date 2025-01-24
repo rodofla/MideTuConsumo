@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">MideTuConsumo</string>
+    <string name="list_title">Lista de Medidores</string>
+    <string name="form_title">Ingresar Lectura</string>
+    <string name="button_save">Guardar</string>
+</resources>
