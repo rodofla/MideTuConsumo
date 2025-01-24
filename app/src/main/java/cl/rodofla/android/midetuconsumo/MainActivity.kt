@@ -13,12 +13,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            // Aplicamos el tema de Material 3
             MideTuConsumoTheme {
                 Surface(color = MaterialTheme.colorScheme.background) {
-                    // Inicializamos el controlador de navegación
                     val navController = rememberNavController()
-                    // Llamamos a la función de navegación
                     AppNavigation(navController = navController)
                 }
             }

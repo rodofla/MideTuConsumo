@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-// Aquí colocas el bloque configurations.all
+
 configurations.all {
     resolutionStrategy.eachDependency {
         if (requested.group == "org.jetbrains" && requested.name == "annotations") {
