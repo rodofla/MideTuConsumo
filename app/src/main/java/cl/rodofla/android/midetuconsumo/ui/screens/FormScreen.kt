@@ -13,12 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cl.rodofla.android.midetuconsumo.viewmodel.ReadingViewModel
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.*
 
 
@@ -31,9 +29,9 @@ fun FormScreen(
 ) {
     val context = LocalContext.current
 
-    // Estados del formulario
+
     var value by remember { mutableStateOf("") }
-    var date by remember { mutableStateOf(SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())) }
+    var dateMillis by remember { mutableLongStateOf(System.currentTimeMillis()) }
     var type by remember { mutableStateOf("agua") }
     var showDatePicker by remember { mutableStateOf(false) }
 
@@ -50,13 +48,6 @@ fun FormScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            Text(
-                text = "Registrar Gastosr",
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(bottom = 16.dp),
-                textAlign = TextAlign.Center
-            )
-
             // Campo del valor del medidor
             OutlinedTextField(
                 value = value,
@@ -74,7 +65,7 @@ fun FormScreen(
 
             // Campo de fecha con DatePicker modal
             OutlinedTextField(
-                value = date,
+                value = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(dateMillis)),
                 onValueChange = { },
                 label = { Text("Fecha (yyyy-MM-dd)") },
                 readOnly = true,
@@ -96,7 +87,7 @@ fun FormScreen(
                 DatePickerModal(
                     onDateSelected = { millis ->
                         if (millis != null) {
-                            date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(millis))
+                            dateMillis = millis
                         }
                         showDatePicker = false
                     },
@@ -137,20 +128,11 @@ fun FormScreen(
             // Botón de guardar
             Button(
                 onClick = {
-                    // Validaciones
-                    val isDateValid = try {
-                        LocalDate.parse(date)
-                        true
-                    } catch (e: Exception) {
-                        false
-                    }
-
-                    if (value.isNotEmpty() && isDateValid) {
+                    if (value.isNotEmpty()) {
                         readingViewModel.addReading(
                             type = type,
                             value = value.toFloatOrNull() ?: 0f,
-                            date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(date)?.time
-                                ?: System.currentTimeMillis()
+                            date = dateMillis // Usamos directamente el valor almacenado
                         )
                         Toast.makeText(context, "Gastos registrados con éxito", Toast.LENGTH_SHORT).show()
                         onFormDone()
@@ -167,6 +149,7 @@ fun FormScreen(
         }
     }
 }
+
 
 // Componente DatePickerModal
 @OptIn(ExperimentalMaterial3Api::class)

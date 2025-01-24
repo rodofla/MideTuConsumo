@@ -7,6 +7,7 @@ import androidx.room.Room
 import cl.rodofla.android.midetuconsumo.data.local.AppDatabase
 import cl.rodofla.android.midetuconsumo.data.model.ReadingEntity
 import cl.rodofla.android.midetuconsumo.repository.ReadingRepository
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -21,6 +22,7 @@ class ReadingViewModel(application: Application) : AndroidViewModel(application)
     ).build()
 
     private val repository = ReadingRepository(db.readingDao())
+    private val _forceUpdate = MutableStateFlow(Unit)
 
     val allReadings: StateFlow<List<ReadingEntity>> =
         repository.getAllReadings()
@@ -41,4 +43,11 @@ class ReadingViewModel(application: Application) : AndroidViewModel(application)
             )
         }
     }
+
+    fun refreshReadings() {
+        viewModelScope.launch {
+            _forceUpdate.value = Unit
+        }
+    }
+
 }

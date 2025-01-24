@@ -186,7 +186,7 @@ fun ReadingItem(reading: ReadingEntity?, media: Double?) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Valor: ${reading?.value?.toInt() ?: 0}",
+                text = "Valor: $${reading?.value?.toInt() ?: 0}",
                 style = MaterialTheme.typography.bodySmall
             )
             Text(
